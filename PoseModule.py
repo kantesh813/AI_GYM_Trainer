@@ -20,8 +20,10 @@ class poseDetector():
         if self.results.pose_landmarks:
             if draw:
                 self.mpDraw.draw_landmarks(img, self.results.pose_landmarks,
-                                           self.mpPose.POSE_CONNECTIONS)
+                                    self.mpPose.POSE_CONNECTIONS)
         return img
+
+
     def findPosition(self, img, draw=True):
         self.lmList = []
         if self.results.pose_landmarks:
@@ -33,11 +35,14 @@ class poseDetector():
                 if draw:
                     cv2.circle(img, (cx, cy), 5, (255, 0, 0), cv2.FILLED)
         return self.lmList
-    def findAngle(self, img, p1, p2, p3, draw=True):
+    def findAngle(self, img, p1, p2, p3, draw=True,Barbel=False):
         # Get the landmarks
         x1, y1 = self.lmList[p1][1:]
         x2, y2 = self.lmList[p2][1:]
-        x3, y3 = self.lmList[p3][1:]
+        if Barbel:
+            x3,y3=p3
+        else:
+            x3, y3 = self.lmList[p3][1:]
         # Calculate the Angle
         angle = math.degrees(math.atan2(y3 - y2, x3 - x2) -
                              math.atan2(y1 - y2, x1 - x2))
@@ -47,7 +52,8 @@ class poseDetector():
         # Draw
         if draw:
             cv2.line(img, (x1, y1), (x2, y2), (255, 255, 255), 3)
-            cv2.line(img, (x3, y3), (x2, y2), (255, 255, 255), 3)
+            if(not Barbel):
+                cv2.line(img, (x3, y3), (x2, y2), (255, 255, 255), 3)
             cv2.circle(img, (x1, y1), 10, (0, 0, 255), cv2.FILLED)
             cv2.circle(img, (x1, y1), 15, (0, 0, 255), 2)
             cv2.circle(img, (x2, y2), 10, (0, 0, 255), cv2.FILLED)
