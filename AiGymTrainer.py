@@ -134,9 +134,9 @@ class AIGymTrainer:
 
 
                 if self.checkDeadlift(left_hand, right_hand, left_knee, right_knee,False):
-                    print("135 line give true")
+
                 if(self.stage == "down" and self.checkDeadlift(left_hand, right_hand, left_knee, right_knee, True)):
-                    print("139 line give true")
+
                     self.stage = "up"
                     self.count =self.count+1
                     mytext = str(self.count)
@@ -184,9 +184,9 @@ class AIGymTrainer:
                 else:
                     return False
             else:
-                print("for up a.y:", a.y, " c.y:", c.y, " b.y:", b.y, " d.y:", d.y)
+
                 if (a.y+0.11) < (c.y) and (b.y+0.11) < (d.y):
-                    print("Give to Down")
+                    
                     self.stage="down"
                     return True
                 else:
