@@ -29,7 +29,7 @@ class AIGymTrainer:
                                          14,
                                          12,
                                          )
-            per_val1 = int(np.interp(a1, (190, 280), (0, 100)))
+            per_val1 = int(np.interp(a1, (190, 270), (0, 100)))
             per_val2 = int(np.interp(a2, (70, 170), (100, 0)))
             bar_val1 = int(np.interp(per_val1, (0, 100), (40 + 350, 40)))
             bar_val2 = int(np.interp(per_val2, (0, 100), (40 + 350, 40)))
@@ -37,7 +37,7 @@ class AIGymTrainer:
             cv2.rectangle(img, (570, 40), (570 + 35, 40 + 350), (), 3)
             cv2.rectangle(img, (35, bar_val2), (35 + 35, 40 + 350), (0,255,255), cv2.FILLED)
             cv2.rectangle(img, (35, 40), (35 + 35, 40 + 350), (), 3)
-            if per_val1 == 100 and per_val2 == 100:
+            if per_val1 == 100 or per_val2 == 100:
                 if self.dir == 0:
                     self.push_ups += 0.5
                     print(self.push_ups)
