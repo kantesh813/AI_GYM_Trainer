@@ -10,7 +10,7 @@ from playsound import playsound
 
 class AIGymTrainer:
     def __init__(self):
-        self.cap = cv2.VideoCapture('./deadlift.mp4')
+        self.cap = cv2.VideoCapture(0)
         self.detector = pm.poseDetector()
         self.dir = 0
         self.count = 0
@@ -85,6 +85,7 @@ class AIGymTrainer:
                     self.count += 0.5
                     self.dir = 0
 
+
             cv2.putText(img, str(int(self.count)), (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 5, (255, 0, 0), 5, cv2.LINE_AA)
 
 
@@ -133,7 +134,8 @@ class AIGymTrainer:
                 right_knee = landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value]
 
 
-                if self.checkDeadlift(left_hand, right_hand, left_knee, right_knee,False):
+                self.checkDeadlift(left_hand, right_hand, left_knee, right_knee,False)
+
 
                 if(self.stage == "down" and self.checkDeadlift(left_hand, right_hand, left_knee, right_knee, True)):
 
@@ -154,21 +156,21 @@ class AIGymTrainer:
 
             # Rep data
             print("I am here")
-            cv2.putText(image, 'REPS', (15, 12),
+            cv2.putText(cap, 'REPS', (15, 12),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
-            cv2.putText(image, str(self.count),
+            cv2.putText(cap, str(self.count),
                         (10, 60),
                         cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 2, cv2.LINE_AA)
 
             # Stage data
-            cv2.putText(image, 'STAGE', (85, 12),
+            cv2.putText(cap, 'STAGE', (85, 12),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
-            cv2.putText(image, stage,
+            cv2.putText(cap, stage,
                         (80, 60),
                         cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 2, cv2.LINE_AA)
 
             # Render detections
-            mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
+            mp_drawing.draw_landmarks(cap, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
                                       mp_drawing.DrawingSpec(color=(245, 117, 66), thickness=2, circle_radius=2),
                                       mp_drawing.DrawingSpec(color=(245, 66, 230), thickness=2, circle_radius=2)
                                       )
@@ -210,11 +212,12 @@ class AIGymTrainer:
                 if self.dir == 0:
                     self.count += 0.5
                     self.dir = 1
+
             if per == 0:
                 if self.dir == 1:
                     self.count += 0.5
                     self.dir = 0
-            if angle<140:
+            if per < 30 or per>140:
                 self.Wrong_Posture(img)
 
             cv2.putText(img, str(int(self.count)), (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 5, (255, 0, 0), 5, cv2.LINE_AA)
@@ -228,7 +231,7 @@ class AIGymTrainer:
                 x = x + 200
                 FPangle = self.detector.findAngle(img, 12, 24, (x, y), True, True)
                 print(FPangle)
-                cv2.circle(img, (x, y), 5, (255, 0, 0), cv2.FILLED)
+                # cv2.circle(img, (x, y), 5, (255, 0, 0), cv2.FILLED)
 
             if per == 100:
                 if self.dir == 0:
@@ -239,6 +242,7 @@ class AIGymTrainer:
                     self.count += 0.5
                     self.dir = 0
 
+
             PFangle = self.detector.findAngle(img, 12, 24, (x, y), True, True)
             if (PFangle < 90 or PFangle > 100):
                 self.Wrong_Posture(img,"Wrong Angle")
@@ -248,7 +252,13 @@ class AIGymTrainer:
 
 
     def run(self):
-        exercise_choice = input("Enter 1 for single dumbbell curl, 2 for reverse fly, 3 for barbell curl, 4 for push-ups:")
+        exercise_choice = input("Enter 1 for single dumbbell curl, 2 for reverse fly, 3 for barbell curl, 4 for push-ups 5 for Deadlift:")
+        if exercise_choice == '4':
+            self.cap =cv2.VideoCapture('pushups.mp4')
+
+        elif exercise_choice == '5':
+            self.cap = cv2.VideoCapture('deadlift.mp4')
+
         while True:
             success, img = self.cap.read()
             img = cv2.resize(img, (780, 720))
