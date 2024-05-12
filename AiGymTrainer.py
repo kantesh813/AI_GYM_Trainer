@@ -15,7 +15,7 @@ class AIGymTrainer:
         self.dir = 0
         self.count = 0
         self.push_ups = 0
-        self.run()
+        # self.run()
         self.stage = "down"
 
 
@@ -188,7 +188,7 @@ class AIGymTrainer:
             else:
 
                 if (a.y+0.11) < (c.y) and (b.y+0.11) < (d.y):
-                    
+
                     self.stage="down"
                     return True
                 else:
@@ -251,8 +251,8 @@ class AIGymTrainer:
 
 
 
-    def run(self):
-        exercise_choice = input("Enter 1 for single dumbbell curl, 2 for reverse fly, 3 for barbell curl, 4 for push-ups 5 for Deadlift:")
+    def run(self, exercise_choice: str):
+        # exercise_choice = input("Enter 1 for single dumbbell curl, 2 for reverse fly, 3 for barbell curl, 4 for push-ups 5 for Deadlift:")
         if exercise_choice == '4':
             self.cap =cv2.VideoCapture('pushups.mp4')
 
